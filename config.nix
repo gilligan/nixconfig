@@ -29,9 +29,17 @@
         nodePackages = pkgs.nodePackages
           // pkgs.callPackage ./node-packages { self = nodePackages; };
 
+        toolsEnv = with pkgs; buildEnv {
+            name = "toolsEnv";
+            paths = [
+                libreoffice
+                ];
+        };
+
         devTools = with pkgs; buildEnv {
             name = "devTools";
             paths = [
+                haskellPackages.idris
                 ];
         };
 
@@ -66,14 +74,23 @@
                 ]);
 
         nodeEnv = with pkgs; buildEnv {
-            name = "node";
+            name = "nodeEnv";
             paths = [
                 nodejs
                 ] ++ (with nodePackages; [
                         npm2nix
-                        eslint
+                        jsonlint
                         ]);
         };
+
+        scalaEnv = with pkgs; buildEnv {
+            name = "scalaEnv";
+            paths = [
+                        scala
+                        sbt
+                      ];
+        };
+
 
     };
 }
