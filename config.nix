@@ -4,41 +4,49 @@
     allowBroken = true;
     allowUnfree = true;
 
-    haskellPackageOverrides = self : super : (let inherit (pkgs.haskell-ng) lib; in {
-            ghc-mod = lib.overrideCabal super.ghc-mod (oldAttrs: {
-                src = pkgs.fetchgit {
-                url = https://github.com/kazu-yamamoto/ghc-mod;
-                rev = "247e4e0e7616fe1fecc68fdcf80d6249ac4cee4f";
-                sha256 = "2a23271d0e6907351a246f095040ba18c3ab6bf1cba08a14338d701defa55474";
-                };
-                buildDepends = oldAttrs.buildDepends ++ [ self.cabal-helper self.cereal ];
-                patchPhase = "sed -i 's/Version:\ *0/Version:5.0.1.1/' ghc-mod.cabal";
-                });
-
-            cabal-helper = lib.overrideCabal super.cabal-helper (oldAttrs: {
-                version = "0.3.2.0";
-                sha256 = "06igjmr0n8418wid1pr74cgvlsmwni7ar72g9bddivlbxax1pfli";
-                });
-
-                halive = self.callPackage ./haskell/halive {};
-            });
-
-
     packageOverrides = pkgs : rec {
 
         nodePackages = pkgs.nodePackages
           // pkgs.callPackage ./node-packages { self = nodePackages; };
 
+        iojs25 = pkgs.callPackage ./iojs {};
+
         toolsEnv = with pkgs; buildEnv {
             name = "toolsEnv";
             paths = [
-                libreoffice
+              fzf
+              i3lock
+              ranger
+              tmux
+              volumeicon
+              xcape
+              xsel
                 ];
         };
+
+
+    vimEnv = with pkgs; buildEnv {
+      name = "vim-env";
+      paths = [
+        (neovim.override {
+          vimAlias = true;
+          configure = {
+            customRC = ''
+              source $HOME/.vimrc
+            '';
+            vam.pluginDictionaries = [
+              { names = [ "youcompleteme" ]; }
+            ];
+          };
+        })
+      ];
+    };
+
 
         devTools = with pkgs; buildEnv {
             name = "devTools";
             paths = [
+                flow
                 haskellPackages.idris
                 ];
         };
@@ -60,20 +68,20 @@
                 ghc
                 ghcid
                 ghc-mod
-                halive
+                #halive
                 hasktags
-                hdevtools
-                hindent
+                #hdevtools
+                #hindent
                 hlint
                 happy
                 hoogle
-                hspec
-                pandoc
-                purescript
-                stylish-haskell
+                #hspec
+                #pandoc
+                #purescript
+                #stylish-haskell
                 ]);
 
-        nodeEnv = with pkgs; buildEnv {
+        nodejsEnv = with pkgs; buildEnv {
             name = "nodeEnv";
             paths = [
                 nodejs
@@ -82,6 +90,27 @@
                         jsonlint
                         ]);
         };
+
+        iojsEnv = with pkgs; buildEnv {
+            name = "iojsEnv";
+            paths = [
+                iojs
+                ] ++ (with nodePackages; [
+                        npm2nix
+                        jsonlint
+                        ]);
+        };
+
+        iojs25Env = with pkgs; buildEnv {
+            name = "iojsEnv";
+            paths = [
+                iojs25
+                ] ++ (with nodePackages; [
+                        npm2nix
+                        jsonlint
+                        ]);
+        };
+
 
         scalaEnv = with pkgs; buildEnv {
             name = "scalaEnv";
