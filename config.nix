@@ -21,6 +21,7 @@
               volumeicon
               xcape
               xsel
+              zeal
                 ];
         };
 
@@ -35,7 +36,10 @@
               source $HOME/.vimrc
             '';
             vam.pluginDictionaries = [
-              { names = [ "youcompleteme" ]; }
+              { names = [
+                          "youcompleteme"
+                          "tmux-navigator"
+                        ]; }
             ];
           };
         })
