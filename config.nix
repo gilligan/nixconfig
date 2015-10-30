@@ -4,21 +4,24 @@
     allowBroken = true;
     allowUnfree = true;
 
+    haskellPackageOverrides = self : super : (let inherit (pkgs.haskell) lib; in {
+      infernu = self.callPackage ./haskell/infernu {};
+    });
+
     packageOverrides = pkgs : rec {
 
-        nodePackages = pkgs.nodePackages
-          // pkgs.callPackage ./node-packages { self = nodePackages; };
+        #nodePackages = pkgs.nodePackages
+          #// pkgs.callPackage ./node-packages { self = nodePackages; };
 
         iojs25 = pkgs.callPackage ./iojs {};
 
         toolsEnv = with pkgs; buildEnv {
             name = "toolsEnv";
             paths = [
-              fzf
-              i3lock
               ranger
               tmux
               volumeicon
+              jq
               xcape
               xsel
               zeal
@@ -36,10 +39,7 @@
               source $HOME/.vimrc
             '';
             vam.pluginDictionaries = [
-              { names = [
-                          "youcompleteme"
-                          "tmux-navigator"
-                        ]; }
+              { names = [ ]; }
             ];
           };
         })
@@ -79,6 +79,7 @@
                 hlint
                 happy
                 hoogle
+                infernu
                 #hspec
                 #pandoc
                 #purescript
@@ -90,16 +91,8 @@
             paths = [
                 nodejs
                 ] ++ (with nodePackages; [
-                        npm2nix
-                        jsonlint
-                        ]);
-        };
-
-        iojsEnv = with pkgs; buildEnv {
-            name = "iojsEnv";
-            paths = [
-                iojs
-                ] ++ (with nodePackages; [
+                        babel
+                        replem
                         npm2nix
                         jsonlint
                         ]);
