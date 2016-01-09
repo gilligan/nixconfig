@@ -1,1 +1,1 @@
-[ "jsonlint", "replem" ]
+[ "jsonlint", "replem", "babel", "coffee-script", "jsinspect" ]
