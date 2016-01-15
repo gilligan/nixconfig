@@ -35,6 +35,7 @@
           vimAlias = true;
           configure = {
             customRC = ''
+            set rtp+=~/.nvim
             source ~/.nvim/nvimrc
             '';
             vam.pluginDictionaries = [
