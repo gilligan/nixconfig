@@ -1,1 +1,1 @@
-[ "jsonlint", "replem", "babel", "coffee-script", "jsinspect" ]
+[ "jsonlint", "replem", "babel", "coffee-script", "jsinspect", "ramda-destruct" ]

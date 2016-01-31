@@ -22,8 +22,8 @@
         git
         jq
         openssl
-        ranger
         silver-searcher
+        tmux
       ];
     };
 
@@ -39,7 +39,7 @@
             source ~/.nvim/nvimrc
             '';
             vam.pluginDictionaries = [
-              { names = [ "youcompleteme" ]; }
+              #{ names = [ "youcompleteme" ]; }
             ];
           };
         })
@@ -88,13 +88,15 @@
     nodejsEnv = with pkgs; buildEnv {
       name = "nodeEnv";
       paths = [
-        nodejs
+        nodejs-5_x
       ] ++ (with nodePackages; [
-        replem
-        npm2nix
-        coffee-script
         jsonlint
+        replem
+        ramda-destruct
+        babel
+        coffee-script
         jsinspect
+        npm2nix
       ]);
     };
 
