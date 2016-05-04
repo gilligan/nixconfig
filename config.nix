@@ -6,6 +6,8 @@
 
   packageOverrides = pkgs : rec {
 
+    jdk = pkgs.jdk8;
+
     nodePackages =
     let
       self = pkgs.nodePackages.override {
@@ -20,10 +22,15 @@
       paths = [
         cacert
         git
+        gitAndTools.hub
         jq
+        nox
         openssl
         silver-searcher
         tmux
+        groovy
+        reattach-to-user-namespace
+        python
       ];
     };
 
@@ -35,12 +42,13 @@
           vimAlias = true;
           configure = {
             customRC = ''
+            call remote#host#RegisterPlugin('python3', '/Users/tpflug/.nvim/plugged/deoplete.nvim/rplugin/python3/deoplete.py', [
+                  \ {'sync': 1, 'name': '_deoplete', 'type': 'function', 'opts': {}},
+                 \ ])
+
             set rtp+=~/.nvim
             source ~/.nvim/nvimrc
             '';
-            vam.pluginDictionaries = [
-              #{ names = [ "youcompleteme" ]; }
-            ];
           };
         })
       ];
@@ -96,7 +104,10 @@
         babel
         coffee-script
         jsinspect
+        pnpm
         npm2nix
+        tern
+        ied
       ]);
     };
 
