@@ -1,1 +1,5 @@
-[ "tern", "jsonlint", "replem", "babel", "coffee-script", "jsinspect", "ramda-destruct", "pnpm", "ied" ]
+[ "jsonlint", 
+  "replem",
+  "tern",
+  "tern-jsx"
+]

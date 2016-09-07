@@ -6,37 +6,38 @@
 
   packageOverrides = pkgs : rec {
 
-    jdk = pkgs.jdk8;
 
     nodePackages =
     let
       self = pkgs.nodePackages.override {
         inherit self;
-        generated = pkgs.nodePackages // pkgs.callPackage ./node-packages { inherit self; };
+        generated = pkgs.nodePackages // pkgs.callPackage ./node-packages {};
       };
     in self;
-
 
     toolsEnv = with pkgs; buildEnv {
       name = "toolsEnv";
       paths = [
-        cacert
+        htop
+        oh-my-zsh
+        nix-zsh-completions
+        #bundix
         git
-        gitAndTools.hub
+        htop
         jq
+        nix-repl
+        npm2nix
         nox
-        openssl
+        python
+        #reattach-to-user-namespace
         silver-searcher
         tmux
-        groovy
-        reattach-to-user-namespace
-        python
       ];
     };
 
 
     vimEnv = with pkgs; buildEnv {
-      name = "vim-env";
+      name = "vimEnv";
       paths = [
         (neovim.override {
           vimAlias = true;
@@ -54,60 +55,26 @@
       ];
     };
 
-
-    devTools = with pkgs; buildEnv {
-      name = "devTools";
-      paths = [
-        flow
-      ];
-    };
-
-    rubyEnv = with pkgs; buildEnv {
-      name ="rubyEnv";
-      paths = [
-        ruby
-        bundler
-      ];
-    };
-
-
     ghcEnv = pkgs.haskellPackages.ghcWithPackages (p : with p; [
+    #ghcEnv = pkgs.haskellPackages.ghcWithHoogle
+      #(haskellPackages: with haskellPackages; [
       alex
-      cabal2nix
       cabal-install
-      #codex
-      ghc
-      ghcid
+      cabal-install
+      cabal2nix
       ghc-mod
-      #halive
-      #hasktags
-      #hdevtools
-      #hindent
+      ghcid
       hlint
-      happy
       hoogle
-      #infernu
-      #hspec
-      #pandoc
-      #purescript
-      #stylish-haskell
     ]);
 
     nodejsEnv = with pkgs; buildEnv {
-      name = "nodeEnv";
-      paths = [
-        nodejs-5_x
-      ] ++ (with nodePackages; [
+      name = "nodejsEnv";
+      paths = [ nodejs-6_x ] ++ (with nodePackages; [
         jsonlint
         replem
-        ramda-destruct
-        babel
-        coffee-script
-        jsinspect
-        pnpm
-        npm2nix
         tern
-        ied
+        #tern-jsx
       ]);
     };
 
@@ -117,6 +84,19 @@
         scala
         sbt
       ];
+    };
+
+    elmEnv = with pkgs; buildEnv {
+      name = "elmEnv";
+      paths = (with elmPackages; [
+        elm
+        elm-compiler
+        elm-format
+        elm-make
+        elm-package
+        elm-reactor
+        elm-repl
+      ]);
     };
   };
 }
